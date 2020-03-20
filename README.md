@@ -1,4 +1,4 @@
-# stark  ![](./reator.png =50x)
+# stark  ![](./reator.png)
 
 ## What is Stark?
 A pragmatic lightweight dependency injection framework for Dart developers.
