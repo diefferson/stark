@@ -42,7 +42,7 @@ final appModule = {
 };
 ```
 
-### Initialize Stark in your initial class or Widget (for Flutter)
+### Initialize Stark passing a list of modules in your initial class or Widget (for Flutter )
 ```dart
 void main() => runApp(MyApp());
 
