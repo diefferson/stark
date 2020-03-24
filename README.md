@@ -19,7 +19,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 0.0.1
+  stark: 0.0.2
 ```
 
 ## Usage example
@@ -30,37 +30,29 @@ Import `stark`
 import 'package:stark/stark.dart';
 ```
 
-### Create a Module
+### Modules definition
 ```dart
 import 'package:stark/stark.dart';
 
 final appModule = {
-    Single((i) => Api()), //Singleton definition
-    Single((i) => Repository(i.get())), //Singleton definition with injection parameters
-    Factory((i) => UseCase(i.get())) , //Factory definition
-    Factory.withParams((i, p) => ViewModel(i.get(), p["dynamicParam"])), //Factory definition with dynamic params
+    single((i) => Api()), 
+    single<Repository>((i) => MyRepository(i.get())),
+    factory((i) => UseCase(i.get())), 
+    factoryWithParams((i, p) => ViewModel(i.get(), p["dynamicParam"])),
 };
 ```
 
-### Initialize Stark passing a list of modules in your initial class or Widget (for Flutter )
+### Initialize Stark 
 ```dart
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  
-  @override
-  Widget build(BuildContext context) {
+//You can pass a list with many modules
+Stark.init([
+  appModule,
+  domainModule,
+  presentationModule
+]);
 
-    //You can pass a list with many modules
-    Stark.init([appModule]);
-
-    return MaterialApp(
-      ...
-    );
-  }
-}
 ```
-
 
 ### Getting a inject instance
 
@@ -84,5 +76,105 @@ class LoginScreenState extends State<LoginScreen>{
 }
 ```
 
-## Features and bugs
-Please send feature requests and bugs at the issue tracker.
+## Singleton definition
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    single((i) => Api(i.get())), 
+};
+```
+
+## Factory definition
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    factory((i) => UseCase()), 
+};
+```
+
+## Named injections
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    single((i) => Api(), named: "DEFAULT"), 
+    single((i) => Api(), named: "EXTERNAL"), 
+};
+
+
+// to get named injections
+Stark.get<Api>(named: "DEFAULT");
+
+```
+
+## Dynamic params
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    singleWithParams((i,p) => Api(p["token"])), 
+    factoryWithParams((i,p) => MyPresenter(p["view"])), 
+};
+
+
+// to get with dynamic params
+Stark.get<Api>(params: { "token" : "Bearer asdasdad"})
+Stark.get<MyPresenter>(params: { "view" : this})
+
+```
+
+## Scoped injections
+
+- When you define a scope for an injection, you can dipose it by associating it with a Scope Widget or manually using Stark.disposeScope (name)
+- If your injected class implements Disposable interface the dispose method is called before discard instance.
+
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    single((i) => LoginViewModel(i.get<>()), scope: "Login" ), 
+};
+
+...
+ 
+//Using Scope widget the "Login" scope is disposed when widget is disposed
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Scope(  
+      name: "Login",
+      child: LoginWidgetScreen()
+    )
+  );
+}
+
+class LoginViewModel implements Disposable {
+    @override
+    dispose(){
+      //this method is called when the "Login" scope is diposed, use to dispose your RX Subjects or Streams
+    }
+}
+
+
+//Or You can dispose manually using:
+Stark.disposeScope("Login");
+
+```
+
+## License
+
+Copyright 2020 The Stark Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -44,7 +44,7 @@ class ViewModel{
 class MyApp extends StatelessWidget {
 
   Set<Bind> module = {
-    single((i) => Api(),scoped: ""),
+    single((i) => Api(),scope: ""),
     single<Repository>((i) => MyRepository(i.get())),
     singleWithParams((i, p) => ViewModel(i.get(), p["name"])),
   };

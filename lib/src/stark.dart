@@ -18,8 +18,8 @@ class Stark {
       }
     }
 
-    static T get<T>({String name, Map<String, dynamic> params}){
-      return Injector.getInjector().get<T>(named: name, params: params);
+    static T get<T>({String named, Map<String, dynamic> params}){
+      return Injector.getInjector().get<T>(named: named, params: params);
     }
 
     static disposeScope(String scopeName){

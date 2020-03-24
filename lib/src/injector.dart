@@ -69,7 +69,7 @@ class Injector {
   void disposeScope(String scope){
     _scopedFactories[scope].forEach((e){
       if(_factories[e].instance is Disposable){
-        (_factories[e] as Disposable).dispose();
+        (_factories[e].instance as Disposable).dispose();
       }
       _factories[e].instance = null;
     });

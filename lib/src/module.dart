@@ -23,43 +23,43 @@ class Bind<T> {
   });
 }
 
-Bind single<T>(FactoryFunc<T> factory, {String named, String scoped}){
+Bind single<T>(FactoryFunc<T> factory, {String named, String scope}){
   return Bind._internal(
       factoryFunc: factory,
       isSingleton: true,
       name: named,
       type: T,
-      scope:scoped
+      scope:scope
   );
 }
 
-Bind singleWithParams<T>(FactoryFuncParams<T> factory, {String named, String scoped}){
+Bind singleWithParams<T>(FactoryFuncParams<T> factory, {String named, String scope}){
   return Bind._internal(
       factoryFuncParams: factory,
       isSingleton: true,
       name: named,
       type: T,
-      scope:scoped
+      scope:scope
   );
 }
 
-Bind factory<T>(FactoryFunc<T> factory, {String named, String scoped}){
+Bind factory<T>(FactoryFunc<T> factory, {String named, String scope}){
   return Bind._internal(
       factoryFunc: factory,
       isSingleton: false,
       name: named,
       type: T,
-      scope:scoped
+      scope:scope
   );
 }
 
-Bind factoryWithParams<T>(FactoryFuncParams<T> factory, {String named, String scoped}){
+Bind factoryWithParams<T>(FactoryFuncParams<T> factory, {String named, String scope}){
   return Bind._internal(
       factoryFuncParams: factory,
       isSingleton: false,
       name: named,
       type: T,
-      scope:scoped
+      scope:scope
   );
 }
 
