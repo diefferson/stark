@@ -8,14 +8,13 @@
   - [Modules definition](#modules-definition)
   - [Initialize Stark](#initialize-stark)
   - [Getting a inject instance](#getting-a-inject-instance)
-- **[Singleton definition](#singleton-definition)
-- **[Factory definition](#factory-definition)
-- **[Singleton definition](#singleton-definition)
-- **[Named injections](#named-injections)
-- **[Dynamic params](#dynamic-params)
-- **[Scoped injections](#scoped-injections)
-
-
+- **Reference**
+  - [Singleton definition](#singleton-definition)
+  - [Factory definition](#factory-definition)
+  - [Singleton definition](#singleton-definition)
+  - [Named injections](#named-injections)
+  - [Dynamic params](#dynamic-params)
+  - [Scoped injections](#scoped-injections)
 
 ## What is Stark?
 A pragmatic lightweight dependency injection framework for Dart developers.
