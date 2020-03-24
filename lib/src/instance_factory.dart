@@ -9,19 +9,19 @@ class InstanceFactory<T> {
   final bool _isSingleton;
   final FactoryFuncParams<T> _factoryFn;
 
-  T _instance;
+  T instance;
 
   InstanceFactory(this._factoryFn, this._isSingleton);
 
   T get(Injector injector, Map<String, dynamic> params) {
-    if (_isSingleton && _instance != null) {
-      return _instance;
+    if (_isSingleton && instance != null) {
+      return instance;
     }
 
-    final instance = _factoryFn(injector, params);
+    final newInstance = _factoryFn(injector, params);
     if (_isSingleton) {
-      _instance = instance;
+      instance = newInstance;
     }
-    return instance;
+    return newInstance;
   }
 }

@@ -22,6 +22,10 @@ class Stark {
       return Injector.getInjector().get<T>(named: name, params: params);
     }
 
+    static disposeScope(String scopeName){
+      Injector.getInjector().disposeScope(scopeName);
+    }
+
     static clear(){
       Injector.getInjector().dispose();
     }

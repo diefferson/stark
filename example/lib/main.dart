@@ -9,12 +9,17 @@ class Api{
   }
 }
 
-class Repository{
+abstract class Repository{
+  Future<String> getText();
+}
+
+class MyRepository  implements Repository{
 
   final Api _api;
 
-  Repository(this._api);
+  MyRepository(this._api);
 
+  @override
   Future<String> getText() async {
      final apiResult = await _api.getText();
      return "$apiResult + Respository data";
@@ -38,10 +43,10 @@ class ViewModel{
 
 class MyApp extends StatelessWidget {
 
-  final module = {
-    Single((i) => Api()),
-    Single((i) => Repository(i.get())),
-    Single.withParams((i, p) => ViewModel(i.get(), p["name"])),
+  Set<Bind> module = {
+    single((i) => Api(),scoped: ""),
+    single<Repository>((i) => MyRepository(i.get())),
+    singleWithParams((i, p) => ViewModel(i.get(), p["name"])),
   };
 
   @override
@@ -69,6 +74,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   final viewModel = Stark.get<ViewModel>(params: {"name": "Custom dynamic param"});
 
   @override
