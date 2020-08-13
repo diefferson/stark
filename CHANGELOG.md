@@ -21,3 +21,4 @@ Scope(
 Stark.diposeScope("MyScope");
 
 ```
+## [0.0.3] - Scope dispose fix
