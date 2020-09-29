@@ -1,32 +1,31 @@
-
 import 'package:stark/src/injector.dart';
-import 'module.dart';
+import 'package:stark/stark.dart';
+import 'internal_module.dart';
 
 class Stark {
+  Stark._();
+  static var _initialized = false;
 
-    Stark._();
-    static var _initialized = false;
-
-    static init(List<Set<Bind>> modules){
-      if(!_initialized) {
-        _initialized = true;
-        modules.forEach((binds){
-          binds.forEach((bind) {
-            Injector.getInjector().registerBind(bind);
-          });
-        });
+  static void init(List<Set<Bind>> modules) {
+    if (!_initialized) {
+      _initialized = true;
+      for (var binds in modules) {
+        binds.forEach(Injector.getInjector().registerBind);
       }
     }
+  }
 
-    static T get<T>({String named, Map<String, dynamic> params}){
-      return Injector.getInjector().get<T>(named: named, params: params);
-    }
+  static T get<T>(
+      {StarkComponent component, String named, Map<String, dynamic> params}) {
+    return Injector.getInjector()
+        .get<T>(component: component, named: named, params: params);
+  }
 
-    static disposeScope(String scopeName){
-      Injector.getInjector().disposeScope(scopeName);
-    }
+  static void disposeComponent(StarkComponent component) {
+    Injector.getInjector().disposeComponent(component);
+  }
 
-    static clear(){
-      Injector.getInjector().dispose();
-    }
+  static void clear() {
+    Injector.getInjector().dispose();
+  }
 }

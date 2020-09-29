@@ -22,3 +22,7 @@ Stark.diposeScope("MyScope");
 
 ```
 ## [0.0.3] - Scope dispose fix
+
+## 1.0.0 - First stable relase 
+
+

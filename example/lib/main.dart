@@ -3,50 +3,45 @@ import 'package:stark/stark.dart';
 
 void main() => runApp(MyApp());
 
-class Api{
-  Future<String> getText()async{
-    return "Api return";
+class Api {
+  Future<String> getText() async {
+    return 'Api return';
   }
 }
 
-abstract class Repository{
+abstract class Repository {
   Future<String> getText();
 }
 
-class MyRepository  implements Repository{
-
-  final Api _api;
-
+class MyRepository implements Repository {
   MyRepository(this._api);
+  final Api _api;
 
   @override
   Future<String> getText() async {
-     final apiResult = await _api.getText();
-     return "$apiResult + Respository data";
+    final apiResult = await _api.getText();
+    // ignore: prefer_single_quotes
+    return "$apiResult + Respository data";
   }
 }
 
-
-class ViewModel{
+class ViewModel {
+  ViewModel(this._repository, this._dynamicParams);
 
   final Repository _repository;
   final String _dynamicParams;
 
-  ViewModel(this._repository, this._dynamicParams);
-
   Future<String> getText() async {
     final repositoryResult = await _repository.getText();
-    return "$repositoryResult +  ViewModle data and  $_dynamicParams";
+    return '$repositoryResult +  ViewModle data and  $_dynamicParams';
   }
 }
 
-
 class MyApp extends StatelessWidget {
-
-  Set<Bind> module = {
-    single((i) => Api(),scope: ""),
+  final module = {
+    single((i) => Api(), scope: ''),
     single<Repository>((i) => MyRepository(i.get())),
-    singleWithParams((i, p) => ViewModel(i.get(), p["name"])),
+    singleWithParams((i, p) => ViewModel(i.get(), p['name'])),
   };
 
   @override
@@ -57,15 +52,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Stark Example'),
+      home: const MyHomePage(title: 'Stark Example'),
     );
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
-
-  MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -73,9 +66,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  final viewModel = Stark.get<ViewModel>(params: {"name": "Custom dynamic param"});
+class _MyHomePageState extends State<MyHomePage> with StarkComponent {
+  final ViewModel viewModel = Stark.get<ViewModel>(
+      params: <String, dynamic>{'name': 'Custom dynamic param'});
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: FutureBuilder(
           future: viewModel.getText(),
-          builder: (context, snapshot){
-            if(snapshot.hasData){
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return Text(snapshot.data);
             }
-              return CircularProgressIndicator();
-          }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
     );

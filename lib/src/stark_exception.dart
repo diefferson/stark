@@ -1,10 +1,7 @@
-
 class StarkException implements Exception {
-
+  StarkException(this.message);
   String message;
 
-  StarkException(this.message);
-
   @override
-  String toString() => "Injector Exception: ${this.message}";
+  String toString() => 'Injector Exception: $message';
 }
