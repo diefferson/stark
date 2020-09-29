@@ -43,12 +43,18 @@ class Injector {
 
   void disposeComponent(StarkComponent component) {
     _factories.forEach((key, bind) {
-      bind.instances.forEach((instanceComponent, dynamic instance) {
-        if (instance is Disposable) {
-          instance.dispose();
+      final List<StarkComponent> toDispose = [];
+      bind.instances.forEach((instanceComponent, Object instance) {
+        if (instanceComponent == component) {
+          if (instance is Disposable) {
+            instance.dispose();
+          }
+          toDispose.add(instanceComponent);
         }
-        bind.instances.remove(instanceComponent);
       });
+      bind.instances.removeWhere(
+        (componentKey, Object instance) => toDispose.contains(componentKey),
+      );
     });
   }
 
