@@ -1,6 +1,4 @@
 import 'package:stark/src/disposable.dart';
-import 'package:stark/src/internal_module.dart';
-
 import '../stark.dart';
 
 class Injector {

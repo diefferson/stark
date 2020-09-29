@@ -1,6 +1,5 @@
 import 'package:stark/src/injector.dart';
 import 'package:stark/stark.dart';
-import 'internal_module.dart';
 
 class Stark {
   Stark._();
