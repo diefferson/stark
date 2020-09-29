@@ -1,5 +1,5 @@
 import 'package:stark/src/injector.dart';
-import 'package:stark/src/stark_component.dart';
+import 'package:stark/stark.dart';
 
 typedef FactoryFunc<T> = T Function(Injector i);
 typedef FactoryFuncParams<T> = T Function(
@@ -48,8 +48,14 @@ class Bind<T> {
   }
 
   T _singleInstance(Injector injector, Map<String, dynamic> params) {
+    //Return instance is exists
     if (isSingleton && instance != null) {
       return instance;
+    }
+
+    //Return last scoped Instance is exists
+    if (isSingleton && instances.isNotEmpty) {
+      return instances[instances.keys.last];
     }
 
     final newInstance = _getNewInstance(injector, params);
