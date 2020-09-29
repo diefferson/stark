@@ -39,7 +39,7 @@ class ViewModel {
 
 class MyApp extends StatelessWidget {
   final module = {
-    single((i) => Api(), scope: ''),
+    single((i) => Api()),
     single<Repository>((i) => MyRepository(i.get())),
     singleWithParams((i, p) => ViewModel(i.get(), p['name'])),
   };

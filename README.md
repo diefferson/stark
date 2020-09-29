@@ -160,10 +160,7 @@ final myModule = {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    body: Scope(  
-      name: "Login",
-      child: LoginWidgetScreen()
-    )
+    body:  LoginWidgetScreen()
   );
 }
 
