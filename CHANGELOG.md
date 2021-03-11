@@ -25,4 +25,6 @@ Stark.diposeScope("MyScope");
 
 ## 1.0.0 - First stable relase 
 
+## 2.0.0 - Null Sefaty
+
 
