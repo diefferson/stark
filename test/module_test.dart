@@ -6,11 +6,15 @@ import 'mocks.dart';
 import 'widget_mock.dart';
 
 void main() {
-  test(
-      'Given Bind was dealared as a single, should allwaye returns the same instance',
-      () {
-    final injector = Injector.getInjector();
+  final Injector injector = Injector.getInjector();
+
+  setUp(() {
     injector.dispose();
+  });
+
+  test(
+      'Given Bind was declared as a single, should allwaye returns the same instance',
+      () {
     final bind = single((i) => TestClass());
 
     injector.registerBind(bind);
@@ -22,10 +26,24 @@ void main() {
   });
 
   test(
-      'Given Bind was dealared as a factory, should allwaye returns a new instance',
+      'Given Bind was declared with params, should returns the instance with this param',
       () {
-    final injector = Injector.getInjector();
-    injector.dispose();
+    final bind = factoryWithParams((i, p) => TestClass(param: p?['param']));
+
+    injector.registerBind(bind);
+
+    final firstInstance =
+        bind.get(injector, null, <String, dynamic>{'param': 'firstInstance'});
+    final secondInstance =
+        bind.get(injector, null, <String, dynamic>{'param': 'secondInstance'});
+
+    expect(firstInstance?.param, 'firstInstance');
+    expect(secondInstance?.param, 'secondInstance');
+  });
+
+  test(
+      'Given Bind was declared as a factory, should allwaye returns a new instance',
+      () {
     final bind = factory((i) => TestClass());
 
     injector.registerBind(bind);
@@ -37,10 +55,8 @@ void main() {
   });
 
   test(
-      'Given a SingleBind was declared with a component, should return the same instance while the component lives',
+      'Given a Bind was declared as a single with a component, should return the same instance while the component lives',
       () {
-    final injector = Injector.getInjector();
-    injector.dispose();
     final bind = single((i) => TestClass());
 
     final component = WidgetMockState();
