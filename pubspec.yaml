@@ -1,20 +1,21 @@
 name: stark
 description: Stark - a pragmatic lightweight dependency injection framework for Dart
-version: 1.0.6
+version: 2.0.0
 author: Diefferson Santos <diefferson.sts@gmail.com>
 homepage: https://github.com/diefferson/stark
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  analyzer: '>=0.38.5 <=0.40.6'
-  dart_style: '>=1.2.9 <1.4.0'
+  analyzer: ^1.1.0
+  dart_style: ^1.3.14
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.0.0
 
 flutter:

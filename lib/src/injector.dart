@@ -6,11 +6,11 @@ class Injector {
 
   final Map<String, Bind> _factories = {};
 
-  static Injector _instance;
+  static Injector? _instance;
 
   static Injector getInjector() {
     _instance ??= Injector._internal();
-    return _instance;
+    return _instance!;
   }
 
   void registerBind<T>(Bind<T> bind) {
@@ -26,7 +26,9 @@ class Injector {
   }
 
   T get<T>(
-      {String named, StarkComponent component, Map<String, dynamic> params}) {
+      {String? named,
+      StarkComponent? component,
+      Map<String, dynamic>? params}) {
     final objectKey = _getKey(T, named);
     final bind = _factories[objectKey];
 
@@ -44,7 +46,7 @@ class Injector {
   void disposeComponent(StarkComponent component) {
     _factories.forEach((key, bind) {
       final List<StarkComponent> toDispose = [];
-      bind.instances.forEach((instanceComponent, Object instance) {
+      bind.instances.forEach((instanceComponent, Object? instance) {
         if (instanceComponent == component) {
           if (instance is Disposable) {
             instance.dispose();
@@ -53,11 +55,11 @@ class Injector {
         }
       });
       bind.instances.removeWhere(
-        (componentKey, Object instance) => toDispose.contains(componentKey),
+        (componentKey, Object? instance) => toDispose.contains(componentKey),
       );
     });
   }
 
-  String _getKey<T>(T type, [String name]) =>
+  String _getKey<T>(T type, [String? name]) =>
       '${type.toString()}::${name ?? "default"}';
 }

@@ -14,10 +14,13 @@ class Stark {
     }
   }
 
-  static T get<T>(
-      {StarkComponent component, String named, Map<String, dynamic> params}) {
+  static T get<T>({
+    StarkComponent? component,
+    String? named,
+    Map<String, dynamic>? params,
+  }) {
     return Injector.getInjector()
-        .get<T>(component: component, named: named, params: params);
+        .get<T>(component: component, named: named, params: params)!;
   }
 
   static void disposeComponent(StarkComponent component) {
