@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   final module = {
     single((i) => Api()),
     single<Repository>((i) => MyRepository(i.get())),
-    singleWithParams((i, p) => ViewModel(i.get(), p['name'])),
+    singleWithParams((i, p) => ViewModel(i.get(), p!['name'])),
   };
 
   @override
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -67,7 +67,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with StarkComponent {
-  ViewModel _viewModel;
+  late ViewModel _viewModel;
 
   @override
   void initState() {
@@ -83,11 +83,11 @@ class _MyHomePageState extends State<MyHomePage> with StarkComponent {
         title: Text(widget.title),
       ),
       body: Center(
-        child: FutureBuilder(
+        child: FutureBuilder<String>(
           future: _viewModel.getText(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data);
+              return Text(snapshot.data ?? '');
             }
             return const CircularProgressIndicator();
           },
