@@ -67,8 +67,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with StarkComponent {
-  final ViewModel viewModel = Stark.get<ViewModel>(
-      params: <String, dynamic>{'name': 'Custom dynamic param'});
+  ViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = get<ViewModel>(
+        params: <String, dynamic>{'name': 'Custom dynamic param'});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with StarkComponent {
       ),
       body: Center(
         child: FutureBuilder(
-          future: viewModel.getText(),
+          future: _viewModel.getText(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data);

@@ -11,7 +11,6 @@
 - **Reference**
   - [Singleton definition](#singleton-definition)
   - [Factory definition](#factory-definition)
-  - [Singleton definition](#singleton-definition)
   - [Named injections](#named-injections)
   - [Dynamic params](#dynamic-params)
   - [Scoped injections](#scoped-injections)
@@ -20,8 +19,6 @@
 A pragmatic lightweight dependency injection framework for Dart developers.
 
 ## Some info
-
-This project is based on [koin](https://github.com/InsertKoinIO/koin)
 
 This implementation *does not* rely on the dart reflection apis (mirrors) and favours a simple factory based approach.
 This increases the performance and simplicity of this implementation.
@@ -35,7 +32,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 0.0.3
+  stark: 2.0.0
 ```
 
 ## Usage example
@@ -93,12 +90,21 @@ class LoginScreenState extends State<LoginScreen>{
 ```
 
 
-## Singleton definition
+## Singleton definition:
 ```dart
 import 'package:stark/stark.dart';
 
 final myModule = {
     single((i) => Api(i.get())), 
+};
+```
+
+### Single with dynamic param:
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    singleWithParams((i,p) => Api(p["token"])), 
 };
 ```
 
@@ -108,6 +114,14 @@ import 'package:stark/stark.dart';
 
 final myModule = {
     factory((i) => UseCase()), 
+};
+```
+### Factory with dynamic param:
+```dart
+import 'package:stark/stark.dart';
+
+final myModule = {
+    factoryWithParams((i,p) => Api(p["token"])), 
 };
 ```
 
@@ -144,36 +158,33 @@ Stark.get<MyPresenter>(params: { "view" : this})
 
 ## Scoped injections
 
-- When you define a scope for an injection, you can dipose it by associating it with a Scope Widget or manually using Stark.disposeScope (name)
-- If your injected class implements Disposable interface the dispose method is called before discard instance.
+- You can mix your class with Stark component to associate the injection life time to your widget:
 
 ```dart
-import 'package:stark/stark.dart';
+class _MyHomePageState extends State<MyHomePage> with StarkComponent {
+  ViewModel _viewModel;
 
-final myModule = {
-    single((i) => LoginViewModel(i.get<>()), scope: "Login" ), 
-};
+  @override
+  void initState() {
+    super.initState();
 
+    //View model instance will destroyed when this widget state call dispose.
+    _viewModel = get<ViewModel>(
+        params: <String, dynamic>{'name': 'Custom dynamic param'});
+  }
 ...
- 
-//Using Scope widget the "Login" scope is disposed when widget is disposed
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body:  LoginWidgetScreen()
-  );
-}
+ ````
+
+### Disposable Interface
+Stark provides a Disposable interface, when a injection that implements this interface is will be dispose the method dispose is called, is very nice to viewModels for example:
+```dart
 
 class LoginViewModel implements Disposable {
     @override
     dispose(){
-      //this method is called when the "Login" scope is diposed, use to dispose your RX Subjects or Streams
+      //this method is called when the LoginViewModel is diposed, use to dispose your RX Subjects or Streams
     }
 }
-
-
-//Or You can dispose manually using:
-Stark.disposeScope("Login");
 
 ```
 
