@@ -28,4 +28,6 @@ Stark.diposeScope("MyScope");
 ## 2.0.0 - KoinComponent
 ## 2.0.1 - Null Sefaty
 
+## 2.0.1 - Type error fixes
+
 

@@ -73,7 +73,7 @@ class Bind<T> {
   }
 }
 
-Bind<T> single<T>(FactoryFunc<T> factory, {String? named}) {
+Bind single<T>(FactoryFunc<T> factory, {String? named}) {
   return Bind<T>._internal(
     factoryFunc: factory,
     isSingleton: true,
@@ -82,7 +82,7 @@ Bind<T> single<T>(FactoryFunc<T> factory, {String? named}) {
   );
 }
 
-Bind<T> singleWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
+Bind singleWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
   return Bind<T>._internal(
     factoryFuncParams: factory,
     isSingleton: true,
@@ -91,7 +91,7 @@ Bind<T> singleWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
   );
 }
 
-Bind<T> factory<T>(FactoryFunc<T> factory, {String? named}) {
+Bind factory<T>(FactoryFunc<T> factory, {String? named}) {
   return Bind<T>._internal(
     factoryFunc: factory,
     isSingleton: false,
@@ -100,7 +100,7 @@ Bind<T> factory<T>(FactoryFunc<T> factory, {String? named}) {
   );
 }
 
-Bind<T> factoryWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
+Bind factoryWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
   return Bind<T>._internal(
     factoryFuncParams: factory,
     isSingleton: false,

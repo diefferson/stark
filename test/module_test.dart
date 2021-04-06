@@ -17,10 +17,10 @@ void main() {
       () {
     final bind = single((i) => TestClass());
 
-    injector.registerBind(bind);
+    injector.registerBind<dynamic>(bind);
 
-    final firstInstance = bind.get(injector);
-    final secondInstance = bind.get(injector);
+    final TestClass firstInstance = bind.get(injector);
+    final TestClass secondInstance = bind.get(injector);
 
     expect(firstInstance, secondInstance);
   });
@@ -30,11 +30,11 @@ void main() {
       () {
     final bind = factoryWithParams((i, p) => TestClass(param: p?['param']));
 
-    injector.registerBind(bind);
+    injector.registerBind<dynamic>(bind);
 
-    final firstInstance =
+    final TestClass? firstInstance =
         bind.get(injector, null, <String, dynamic>{'param': 'firstInstance'});
-    final secondInstance =
+    final TestClass? secondInstance =
         bind.get(injector, null, <String, dynamic>{'param': 'secondInstance'});
 
     expect(firstInstance?.param, 'firstInstance');
@@ -44,12 +44,12 @@ void main() {
   test(
       'Given Bind was declared as a factory, should allwaye returns a new instance',
       () {
-    final bind = factory((i) => TestClass());
+    final Bind bind = factory((i) => TestClass());
 
-    injector.registerBind(bind);
+    injector.registerBind<dynamic>(bind);
 
-    final firstInstance = bind.get(injector);
-    final secondInstance = bind.get(injector);
+    final TestClass firstInstance = bind.get(injector);
+    final TestClass secondInstance = bind.get(injector);
 
     expect(firstInstance, isNot(equals(secondInstance)));
   });
@@ -57,22 +57,22 @@ void main() {
   test(
       'Given a Bind was declared as a single with a component, should return the same instance while the component lives',
       () {
-    final bind = single((i) => TestClass());
+    final Bind bind = single<TestClass>((i) => TestClass());
 
     final component = WidgetMockState();
 
-    injector.registerBind(bind);
+    injector.registerBind<dynamic>(bind);
 
-    final firstInstance = bind.get(injector, component);
-    final secondInstance = bind.get(injector, component);
-    final thirdInstance = bind.get(injector);
+    final TestClass firstInstance = bind.get(injector, component);
+    final TestClass secondInstance = bind.get(injector, component);
+    final TestClass thirdInstance = bind.get(injector);
 
     expect(firstInstance, secondInstance);
     expect(firstInstance, thirdInstance);
 
     injector.disposeComponent(component);
 
-    final fourhInstance = bind.get(injector, component);
+    final TestClass fourhInstance = bind.get(injector, component);
 
     expect(fourhInstance, isNot(equals(firstInstance)));
   });
