@@ -31,5 +31,6 @@ Stark.diposeScope("MyScope");
 ## 2.0.1 - Type error fixes
 
 ## 2.0.3 - New Injectable State and refactor disposable interface
+## 2.0.4 - refactor disposable interface
 
 

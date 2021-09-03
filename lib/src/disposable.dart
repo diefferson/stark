@@ -1,3 +1,3 @@
 abstract class Disposable {
-  void disposeInjections();
+  void dispose();
 }

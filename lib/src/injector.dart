@@ -49,7 +49,7 @@ class Injector {
       bind.instances.forEach((instanceComponent, Object? instance) {
         if (instanceComponent == component) {
           if (instance is Disposable) {
-            instance.disposeInjections();
+            instance.dispose();
           }
           toDispose.add(instanceComponent);
         }
