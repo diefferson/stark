@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stark/src/injector.dart';
+import 'package:stark/src/di/injector.dart';
 
 mixin StarkComponent<Widget extends StatefulWidget> on State<Widget> {
   T get<T>({String? named, Map<String, dynamic>? params}) {
