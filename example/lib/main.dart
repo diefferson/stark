@@ -3,16 +3,20 @@ import 'package:stark/stark.dart';
 
 void main() => runApp(MyApp());
 
+// API: here you could call http requests with Dio as example
 class Api {
   Future<String> getText() async {
-    return 'Api return';
+    await Future<dynamic>.delayed(const Duration(milliseconds: 500));
+    return 'example Api async return';
   }
 }
 
+// Interface to your repository implementations
 abstract class Repository {
   Future<String> getText();
 }
 
+// Implementation of Repository with Api as injected parameter
 class MyRepository implements Repository {
   MyRepository(this._api);
   final Api _api;
@@ -20,33 +24,36 @@ class MyRepository implements Repository {
   @override
   Future<String> getText() async {
     final apiResult = await _api.getText();
-    // ignore: prefer_single_quotes
-    return "$apiResult + Respository data";
+    return apiResult;
   }
 }
 
-class ViewModel {
-  ViewModel(this._repository, this._dynamicParams);
+// Implementation of presenter with injected repository
+class Presenter extends StarkPresenter {
+  Presenter(this._repository);
 
   final Repository _repository;
-  final String _dynamicParams;
 
   Future<String> getText() async {
     final repositoryResult = await _repository.getText();
-    return '$repositoryResult +  ViewModle data and  $_dynamicParams';
+    return repositoryResult;
   }
 }
 
 class MyApp extends StatelessWidget {
+  //Example of a StarkModule
   final module = {
     single((i) => Api()),
     single<Repository>((i) => MyRepository(i.get())),
-    singleWithParams((i, p) => ViewModel(i.get(), p!['name'])),
+    singleWithParams((i, p) => Presenter(i.get())),
   };
 
   @override
   Widget build(BuildContext context) {
-    Stark.init([module]);
+    //Initializing Start
+    Stark.init([module], logger: Logger(level: Level.DEBUG));
+
+    //Normal material App
     return MaterialApp(
       title: 'Stark Example',
       theme: ThemeData(
@@ -57,7 +64,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StarkWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
@@ -66,16 +73,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with StarkComponent {
-  late ViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = get<ViewModel>(
-        params: <String, dynamic>{'name': 'Custom dynamic param'});
-  }
-
+class _MyHomePageState extends StarkState<MyHomePage, Presenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +82,8 @@ class _MyHomePageState extends State<MyHomePage> with StarkComponent {
       ),
       body: Center(
         child: FutureBuilder<String>(
-          future: _viewModel.getText(),
+          // you could call presenter directly
+          future: presenter.getText(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data ?? '');

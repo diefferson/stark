@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:stark/src/stark_component.dart';
+import 'package:stark/src/arch/stark_component.dart';
 
 class WidgetMock extends StatefulWidget {
   @override

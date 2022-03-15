@@ -34,3 +34,7 @@ Stark.diposeScope("MyScope");
 ## 2.0.4 - refactor disposable interface
 
 
+## 3.0.0 - Arch components
+
+
+

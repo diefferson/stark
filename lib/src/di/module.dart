@@ -1,9 +1,11 @@
-import 'package:stark/src/injector.dart';
+import 'package:stark/src/di/injector.dart';
 import 'package:stark/stark.dart';
 
-typedef FactoryFunc<T> = T Function(Injector i);
-typedef FactoryFuncParams<T> = T Function(
-    Injector i, Map<String, dynamic>? params);
+typedef _FactoryFunc<T> = T Function(Injector i);
+typedef _FactoryFuncParams<T> = T Function(
+  Injector i,
+  Map<String, dynamic>? params,
+);
 
 class Bind<T> {
   Bind._internal({
@@ -12,19 +14,24 @@ class Bind<T> {
     this.name,
     required this.type,
     required this.isSingleton,
+    this.replaceIfExists = false,
   });
 
-  final FactoryFuncParams<T>? factoryFuncParams;
-  final FactoryFunc<T>? factoryFunc;
+  final _FactoryFuncParams<T>? factoryFuncParams;
+  final _FactoryFunc<T>? factoryFunc;
   final String? name;
   final Type type;
   final bool isSingleton;
+  final bool replaceIfExists;
 
   Map<StarkComponent, T> instances = {};
   T? instance;
 
-  T? get(Injector injector,
-      [StarkComponent? component, Map<String, dynamic>? params]) {
+  T? get(
+    Injector injector, [
+    StarkComponent? component,
+    Map<String, dynamic>? params,
+  ]) {
     if (component != null) {
       return _scopedInstance(component, injector, params);
     } else {
@@ -32,8 +39,11 @@ class Bind<T> {
     }
   }
 
-  T? _scopedInstance(StarkComponent component, Injector injector,
-      Map<String, dynamic>? params) {
+  T? _scopedInstance(
+    StarkComponent component,
+    Injector injector,
+    Map<String, dynamic>? params,
+  ) {
     if (isSingleton && instances.containsKey(component)) {
       return instances[component];
     }
@@ -47,7 +57,10 @@ class Bind<T> {
     return newInstance;
   }
 
-  T? _singleInstance(Injector injector, Map<String, dynamic>? params) {
+  T? _singleInstance(
+    Injector injector,
+    Map<String, dynamic>? params,
+  ) {
     //Return instance is exists
     if (isSingleton && instance != null) {
       return instance;
@@ -73,38 +86,58 @@ class Bind<T> {
   }
 }
 
-Bind single<T>(FactoryFunc<T> factory, {String? named}) {
+Bind single<T>(
+  _FactoryFunc<T> factory, {
+  String? named,
+  bool replaceIfExists = false,
+}) {
   return Bind<T>._internal(
     factoryFunc: factory,
     isSingleton: true,
     name: named,
     type: T,
+    replaceIfExists: replaceIfExists,
   );
 }
 
-Bind singleWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
+Bind singleWithParams<T>(
+  _FactoryFuncParams<T> factory, {
+  String? named,
+  bool replaceIfExists = false,
+}) {
   return Bind<T>._internal(
     factoryFuncParams: factory,
     isSingleton: true,
     name: named,
     type: T,
+    replaceIfExists: replaceIfExists,
   );
 }
 
-Bind factory<T>(FactoryFunc<T> factory, {String? named}) {
+Bind factory<T>(
+  _FactoryFunc<T> factory, {
+  String? named,
+  bool replaceIfExists = false,
+}) {
   return Bind<T>._internal(
     factoryFunc: factory,
     isSingleton: false,
     name: named,
     type: T,
+    replaceIfExists: replaceIfExists,
   );
 }
 
-Bind factoryWithParams<T>(FactoryFuncParams<T> factory, {String? named}) {
+Bind factoryWithParams<T>(
+  _FactoryFuncParams<T> factory, {
+  String? named,
+  bool replaceIfExists = false,
+}) {
   return Bind<T>._internal(
     factoryFuncParams: factory,
     isSingleton: false,
     name: named,
     type: T,
+    replaceIfExists: replaceIfExists,
   );
 }

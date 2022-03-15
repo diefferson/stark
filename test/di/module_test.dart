@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stark/src/injector.dart';
-import 'package:stark/src/module.dart';
+import 'package:stark/src/di/injector.dart';
+import 'package:stark/src/di/module.dart';
 
-import 'mocks.dart';
-import 'widget_mock.dart';
+import '../mocks.dart';
+import '../widget_mock.dart';
 
 void main() {
   final Injector injector = Injector.getInjector();
@@ -78,7 +78,7 @@ void main() {
   });
 
   test('Single Bind should instantiante bind with correct atributes', () {
-    final FactoryFunc<TestClass> factoryFunc = (i) => TestClass();
+    final factoryFunc = (i) => TestClass();
     final bind = single(factoryFunc, named: 'Single');
 
     expect(bind.isSingleton, true);
@@ -89,7 +89,7 @@ void main() {
   });
 
   test('Factory Bind should instantiante bind with correct atributes', () {
-    final FactoryFunc<TestClass> factoryFunc = (i) => TestClass();
+    final factoryFunc = (i) => TestClass();
     final bind = factory(factoryFunc, named: 'Factory');
 
     expect(bind.isSingleton, false);
@@ -102,8 +102,7 @@ void main() {
   test(
       'Single with params Bind should instantiante bind with correct atributes',
       () {
-    final FactoryFuncParams<TestClass> factoryFuncParams =
-        (i, p) => TestClass(param: p?['param']);
+    final factoryFuncParams = (i, p) => TestClass(param: p?['param']);
     final bind =
         singleWithParams(factoryFuncParams, named: 'Single with params');
 
@@ -117,8 +116,7 @@ void main() {
   test(
       'Factory with params Bind should instantiante bind with correct atributes',
       () {
-    final FactoryFuncParams<TestClass> factoryFuncParams =
-        (i, p) => TestClass(param: p?['param']);
+    final factoryFuncParams = (i, p) => TestClass(param: p?['param']);
     final bind =
         factoryWithParams(factoryFuncParams, named: 'Factory with params');
 

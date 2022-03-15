@@ -1,15 +1,17 @@
-import 'package:stark/src/disposable.dart';
-import '../stark.dart';
+import 'package:stark/src/model/disposable.dart';
+import 'package:stark/src/model/logger.dart';
+import '../../stark.dart';
 
 class Injector {
-  Injector._internal();
+  Injector._internal({required this.logger});
 
+  final Logger logger;
   final Map<String, Bind> _factories = {};
 
   static Injector? _instance;
 
-  static Injector getInjector() {
-    _instance ??= Injector._internal();
+  static Injector getInjector({Logger? logger}) {
+    _instance ??= Injector._internal(logger: logger ?? Logger());
     return _instance!;
   }
 
@@ -17,33 +19,47 @@ class Injector {
     final objectKey = _getKey(bind.type, bind.name);
 
     if (!_factories.containsKey(objectKey)) {
+      logger.debug(
+          'Registering ${bind.isSingleton ? 'singleton' : 'factory'}  $objectKey');
+      _factories[objectKey] = bind;
+    } else if (bind.replaceIfExists) {
+      logger.info(
+          'Replacing ${bind.isSingleton ? 'singleton' : 'factory'} $objectKey to new object');
       _factories[objectKey] = bind;
     } else {
       final objectKey2 = objectKey;
-      throw StarkException(
-          'Object $objectKey2 is already defined!, consider use named bind to register the same type.');
+      final message =
+          'Object $objectKey2 is already defined!, consider use named bind to register the same type.';
+      logger.error(message);
+      throw StarkException(message);
     }
   }
 
-  T get<T>(
-      {String? named,
-      StarkComponent? component,
-      Map<String, dynamic>? params}) {
+  T get<T>({
+    String? named,
+    StarkComponent? component,
+    Map<String, dynamic>? params,
+  }) {
     final objectKey = _getKey(T, named);
     final bind = _factories[objectKey];
+    logger.debug('Getting $objectKey');
 
     if (bind == null) {
-      throw StarkException("Cannot find object factory for '$objectKey'");
+      final message = "Cannot find object factory for '$objectKey'";
+      logger.debug(message);
+      throw StarkException(message);
     }
 
     return bind.get(this, component, params);
   }
 
   void dispose() {
+    logger.info('Disposing injector');
     _factories.clear();
   }
 
   void disposeComponent(StarkComponent component) {
+    logger.info('Disposing component ${component.runtimeType}');
     _factories.forEach((key, bind) {
       final List<StarkComponent> toDispose = [];
       bind.instances.forEach((instanceComponent, Object? instance) {
