@@ -14,6 +14,8 @@
   - [Named injections](#named-injections)
   - [Dynamic params](#dynamic-params)
   - [Scoped injections](#scoped-injections)
+  - [Disposable Interface](#disposable-interface)
+  - [Arch Components](#arch-components)
 
 ## What is Stark?
 A pragmatic lightweight dependency injection framework for Dart developers.
@@ -32,7 +34,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 2.0.0
+  stark: 3.0.0
 ```
 
 ## Usage example
@@ -67,6 +69,12 @@ Stark.init([
 
 ```
 
+#### Initialize Stark with logger
+```dart
+Stark.init([...], logger: Logger());
+```
+
+
 ### Getting a inject instance
 
 ```dart
@@ -88,7 +96,6 @@ class LoginScreenState extends State<LoginScreen>{
   }
 }
 ```
-
 
 ## Singleton definition:
 ```dart
@@ -184,6 +191,36 @@ class LoginViewModel implements Disposable {
     dispose(){
       //this method is called when the LoginViewModel is diposed, use to dispose your RX Subjects or Streams
     }
+}
+
+```
+
+
+### Arch Components
+You could use `StarkPresenter` and `StarkState` or `StartkWidget` pro get a injected and scoped presenter in your statefull widget: 
+
+```dart
+
+class MyPresenter extends StarkPresenter {
+   final text = 'Hello World';
+}
+
+class MyWidget extends StarkWidget {
+  const MyWidget({Key? key}) : super(key: key);
+
+  @override
+  _MyWidgetState createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends StarkState<MyWidget, MyPresenter> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(
+        presenter.text
+      )
+    );
+  }
 }
 
 ```
