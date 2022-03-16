@@ -5,22 +5,32 @@ class Stark {
   Stark._();
   static var _initialized = false;
 
-  static void init(List<Module> modules, {Logger? logger}) {
+  static void init(List<Set<Bind>> modules, {Logger? logger}) {
     if (!_initialized) {
-      _initialized = true;
       final _logger = logger ?? Logger(level: Level.DEBUG);
       _logger.info('Initializing Stark');
-      Injector.initInjector(logger: _logger);
-      modules.forEach(Injector.getInjector().registerModule);
+      _initialized = true;
+      for (var binds in modules) {
+        binds.forEach(Injector.getInjector(logger: _logger).registerBind);
+      }
     }
   }
 
-  static void registerModule(Module module) {
+  static void registerModule(Set<Bind> module) {
     if (!_initialized) {
       throw StarkException(
           'Stark not initialized please call Stark.init before');
     } else {
-      Injector.getInjector().registerModule(module);
+      module.forEach(Injector.getInjector().registerBind);
+    }
+  }
+
+  static void registerBind(Bind bind) {
+    if (!_initialized) {
+      throw StarkException(
+          'Stark not initialized please call Stark.init before');
+    } else {
+      Injector.getInjector().registerBind(bind);
     }
   }
 

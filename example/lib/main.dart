@@ -42,10 +42,11 @@ class Presenter extends StarkPresenter {
 
 class MyApp extends StatelessWidget {
   //Example of a StarkModule
-  final module = Module()
-    ..single((i) => Api())
-    ..single<Repository>((i) => MyRepository(i.get()))
-    ..singleWithParams((i, p) => Presenter(i.get()));
+  final module = {
+    single((i) => Api()),
+    single<Repository>((i) => MyRepository(i.get())),
+    singleWithParams((i, p) => Presenter(i.get())),
+  };
 
   @override
   Widget build(BuildContext context) {
