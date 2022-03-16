@@ -7,6 +7,7 @@ import '../widget_mock.dart';
 
 void main() {
   final Injector injector = Injector.getInjector();
+
   setUp(() {
     injector.dispose();
   });
@@ -14,12 +15,12 @@ void main() {
   test(
       'Given Bind was declared as a single, should allwaye returns the same instance',
       () {
-    final module = Module()..single((i) => TestClass());
+    final bind = single((i) => TestClass());
 
-    injector.registerModule(module);
+    injector.registerBind<dynamic>(bind);
 
-    final TestClass firstInstance = injector.get();
-    final TestClass secondInstance = injector.get();
+    final TestClass firstInstance = bind.get(injector);
+    final TestClass secondInstance = bind.get(injector);
 
     expect(firstInstance, secondInstance);
   });
@@ -27,29 +28,28 @@ void main() {
   test(
       'Given Bind was declared with params, should returns the instance with this param',
       () {
-    final module = Module()
-      ..factoryWithParams((i, p) => TestClass(param: p?['param']));
+    final bind = factoryWithParams((i, p) => TestClass(param: p?['param']));
 
-    injector.registerModule(module);
+    injector.registerBind<dynamic>(bind);
 
-    final TestClass firstInstance =
-        injector.get(params: <String, dynamic>{'param': 'firstInstance'});
-    final TestClass secondInstance =
-        injector.get(params: <String, dynamic>{'param': 'secondInstance'});
+    final TestClass? firstInstance =
+        bind.get(injector, null, <String, dynamic>{'param': 'firstInstance'});
+    final TestClass? secondInstance =
+        bind.get(injector, null, <String, dynamic>{'param': 'secondInstance'});
 
-    expect(firstInstance.param, 'firstInstance');
-    expect(secondInstance.param, 'secondInstance');
+    expect(firstInstance?.param, 'firstInstance');
+    expect(secondInstance?.param, 'secondInstance');
   });
 
   test(
       'Given Bind was declared as a factory, should allwaye returns a new instance',
       () {
-    final module = Module()..factory((i) => TestClass());
+    final Bind bind = factory((i) => TestClass());
 
-    injector.registerModule(module);
+    injector.registerBind<dynamic>(bind);
 
-    final TestClass firstInstance = injector.get();
-    final TestClass secondInstance = injector.get();
+    final TestClass firstInstance = bind.get(injector);
+    final TestClass secondInstance = bind.get(injector);
 
     expect(firstInstance, isNot(equals(secondInstance)));
   });
@@ -57,73 +57,73 @@ void main() {
   test(
       'Given a Bind was declared as a single with a component, should return the same instance while the component lives',
       () {
-    final module = Module()..single<TestClass>((i) => TestClass());
+    final Bind bind = single<TestClass>((i) => TestClass());
 
     final component = WidgetMockState();
 
-    injector.registerModule(module);
+    injector.registerBind<dynamic>(bind);
 
-    final TestClass firstInstance = injector.get(component: component);
-    final TestClass secondInstance = injector.get(component: component);
-    final TestClass thirdInstance = injector.get();
+    final TestClass firstInstance = bind.get(injector, component);
+    final TestClass secondInstance = bind.get(injector, component);
+    final TestClass thirdInstance = bind.get(injector);
 
     expect(firstInstance, secondInstance);
     expect(firstInstance, thirdInstance);
 
     injector.disposeComponent(component);
 
-    final TestClass fourhInstance = injector.get(component: component);
+    final TestClass fourhInstance = bind.get(injector, component);
 
     expect(fourhInstance, isNot(equals(firstInstance)));
   });
 
   test('Single Bind should instantiante bind with correct atributes', () {
     final factoryFunc = (i) => TestClass();
-    final module = Module()..single(factoryFunc, named: 'Single');
+    final bind = single(factoryFunc, named: 'Single');
 
-    expect(module.binds[0].isSingleton, true);
-    expect(module.binds[0].factoryFunc, factoryFunc);
-    expect(module.binds[0].factoryFuncParams, null);
-    expect(module.binds[0].name, 'Single');
-    expect(module.binds[0].type, TestClass);
+    expect(bind.isSingleton, true);
+    expect(bind.factoryFunc, factoryFunc);
+    expect(bind.factoryFuncParams, null);
+    expect(bind.name, 'Single');
+    expect(bind.type, TestClass);
   });
 
   test('Factory Bind should instantiante bind with correct atributes', () {
     final factoryFunc = (i) => TestClass();
-    final module = Module()..factory(factoryFunc, named: 'Factory');
+    final bind = factory(factoryFunc, named: 'Factory');
 
-    expect(module.binds[0].isSingleton, false);
-    expect(module.binds[0].factoryFunc, factoryFunc);
-    expect(module.binds[0].factoryFuncParams, null);
-    expect(module.binds[0].name, 'Factory');
-    expect(module.binds[0].type, TestClass);
+    expect(bind.isSingleton, false);
+    expect(bind.factoryFunc, factoryFunc);
+    expect(bind.factoryFuncParams, null);
+    expect(bind.name, 'Factory');
+    expect(bind.type, TestClass);
   });
 
   test(
       'Single with params Bind should instantiante bind with correct atributes',
       () {
     final factoryFuncParams = (i, p) => TestClass(param: p?['param']);
-    final module = Module()
-      ..singleWithParams(factoryFuncParams, named: 'Single with params');
+    final bind =
+        singleWithParams(factoryFuncParams, named: 'Single with params');
 
-    expect(module.binds[0].isSingleton, true);
-    expect(module.binds[0].factoryFunc, null);
-    expect(module.binds[0].factoryFuncParams, factoryFuncParams);
-    expect(module.binds[0].name, 'Single with params');
-    expect(module.binds[0].type, TestClass);
+    expect(bind.isSingleton, true);
+    expect(bind.factoryFunc, null);
+    expect(bind.factoryFuncParams, factoryFuncParams);
+    expect(bind.name, 'Single with params');
+    expect(bind.type, TestClass);
   });
 
   test(
       'Factory with params Bind should instantiante bind with correct atributes',
       () {
     final factoryFuncParams = (i, p) => TestClass(param: p?['param']);
-    final module = Module()
-      ..factoryWithParams(factoryFuncParams, named: 'Factory with params');
+    final bind =
+        factoryWithParams(factoryFuncParams, named: 'Factory with params');
 
-    expect(module.binds[0].isSingleton, false);
-    expect(module.binds[0].factoryFunc, null);
-    expect(module.binds[0].factoryFuncParams, factoryFuncParams);
-    expect(module.binds[0].name, 'Factory with params');
-    expect(module.binds[0].type, TestClass);
+    expect(bind.isSingleton, false);
+    expect(bind.factoryFunc, null);
+    expect(bind.factoryFuncParams, factoryFuncParams);
+    expect(bind.name, 'Factory with params');
+    expect(bind.type, TestClass);
   });
 }
