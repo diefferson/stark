@@ -36,6 +36,7 @@ Stark.diposeScope("MyScope");
 
 ## 3.0.0 - Arch components
 ## 3.0.1 - Arch components
+## 3.0.2 - Arch components
 
 
 

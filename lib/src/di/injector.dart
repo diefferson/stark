@@ -1,3 +1,4 @@
+import 'package:stark/src/di/bind.dart';
 import 'package:stark/src/model/disposable.dart';
 import 'package:stark/src/model/logger.dart';
 import '../../stark.dart';
@@ -10,29 +11,18 @@ class Injector {
 
   static Injector? _instance;
 
-  static Injector getInjector({Logger? logger}) {
+  static Injector initInjector({Logger? logger}) {
     _instance ??= Injector._internal(logger: logger ?? Logger());
     return _instance!;
   }
 
-  void registerBind<T>(Bind<T> bind) {
-    final objectKey = _getKey(bind.type, bind.name);
+  static Injector getInjector() {
+    _instance ??= Injector._internal(logger: Logger(level: Level.NONE));
+    return _instance!;
+  }
 
-    if (!_factories.containsKey(objectKey)) {
-      logger.debug(
-          'Registering ${bind.isSingleton ? 'singleton' : 'factory'}  $objectKey');
-      _factories[objectKey] = bind;
-    } else if (bind.replaceIfExists) {
-      logger.info(
-          'Replacing ${bind.isSingleton ? 'singleton' : 'factory'} $objectKey to new object');
-      _factories[objectKey] = bind;
-    } else {
-      final objectKey2 = objectKey;
-      final message =
-          'Object $objectKey2 is already defined!, consider use named bind to register the same type.';
-      logger.error(message);
-      throw StarkException(message);
-    }
+  void registerModule(Module module) {
+    module.binds.forEach(_registerBind);
   }
 
   T get<T>({
@@ -74,6 +64,26 @@ class Injector {
         (componentKey, Object? instance) => toDispose.contains(componentKey),
       );
     });
+  }
+
+  void _registerBind<T>(Bind<T> bind) {
+    final objectKey = _getKey(bind.type, bind.name);
+
+    if (!_factories.containsKey(objectKey)) {
+      logger.debug(
+          'Registering ${bind.isSingleton ? 'singleton' : 'factory'}  $objectKey');
+      _factories[objectKey] = bind;
+    } else if (bind.replaceIfExists) {
+      logger.info(
+          'Replacing ${bind.isSingleton ? 'singleton' : 'factory'} $objectKey to new object');
+      _factories[objectKey] = bind;
+    } else {
+      final objectKey2 = objectKey;
+      final message =
+          'Object $objectKey2 is already defined!, consider use named bind to register the same type.';
+      logger.error(message);
+      throw StarkException(message);
+    }
   }
 
   String _getKey<T>(T type, [String? name]) =>

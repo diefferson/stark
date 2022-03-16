@@ -34,7 +34,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 3.0.1
+  stark: 3.0.2
 ```
 
 ## Usage example
@@ -49,12 +49,12 @@ import 'package:stark/stark.dart';
 ```dart
 import 'package:stark/stark.dart';
 
-final appModule = {
-    single((i) => Api()), 
-    single<Repository>((i) => MyRepository(i.get())),
-    factory((i) => UseCase(i.get())), 
-    factoryWithParams((i, p) => ViewModel(i.get(), p["dynamicParam"])),
-};
+final appModule = Module() 
+    ..single((i) => Api())
+    ..single<Repository>((i) => MyRepository(i.get()))
+    ..factory((i) => UseCase(i.get())),
+    ..factoryWithParams((i, p) => ViewModel(i.get(), p["dynamicParam"]));
+
 ```
 
 ### Initialize Stark 
@@ -101,45 +101,41 @@ class LoginScreenState extends State<LoginScreen>{
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    single((i) => Api(i.get())), 
-};
+final myModule = Module()
+    ..single((i) => Api(i.get())); 
+
 ```
 
 ### Single with dynamic param:
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    singleWithParams((i,p) => Api(p["token"])), 
-};
+final myModule = Module()
+  ..singleWithParams((i,p) => Api(p["token"]));
 ```
 
 ## Factory definition
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    factory((i) => UseCase()), 
-};
+final myModule = Module()
+  ..factory((i) => UseCase());
 ```
 ### Factory with dynamic param:
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    factoryWithParams((i,p) => Api(p["token"])), 
-};
+final myModule = Module()
+  ..factoryWithParams((i,p) => Api(p["token"]));
 ```
 
 ## Named injections
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    single((i) => Api(), named: "DEFAULT"), 
-    single((i) => Api(), named: "EXTERNAL"), 
-};
+final myModule = Module()
+  ..single((i) => Api(), named: "DEFAULT")
+  ..single((i) => Api(), named: "EXTERNAL");
 
 
 // to get named injections
@@ -151,10 +147,9 @@ Stark.get<Api>(named: "DEFAULT");
 ```dart
 import 'package:stark/stark.dart';
 
-final myModule = {
-    singleWithParams((i,p) => Api(p["token"])), 
-    factoryWithParams((i,p) => MyPresenter(p["view"])), 
-};
+final myModule = Module()
+  ..singleWithParams((i,p) => Api(p["token"]))
+  ..factoryWithParams((i,p) => MyPresenter(p["view"]));
 
 
 // to get with dynamic params
