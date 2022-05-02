@@ -34,7 +34,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 3.0.1
+  stark: 3.0.4
 ```
 
 ## Usage example
