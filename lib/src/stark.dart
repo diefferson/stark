@@ -51,6 +51,7 @@ class Stark {
   }
 
   static void clear() {
+    _initialized = false;
     Injector.getInjector().dispose();
   }
 }
