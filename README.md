@@ -199,8 +199,8 @@ class LoginViewModel implements Disposable {
 ### Arch Components
 To support different types of architectures and state management we move these architecture components to new libraries.
 
-stark_mvp: Stark library for MVP architecture
-stark_bloc: Stark library for flutter_bloc projects
+- stark_mvp: Stark library for MVP architecture
+- stark_bloc: Stark library for flutter_bloc projects
 
 ```
 
