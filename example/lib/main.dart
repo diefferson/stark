@@ -29,7 +29,7 @@ class MyRepository implements Repository {
 }
 
 // Implementation of presenter with injected repository
-class Presenter extends StarkPresenter {
+class Presenter  {
   Presenter(this._repository);
 
   final Repository _repository;
@@ -64,16 +64,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StarkWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState()  => _MyHomePageState();
 }
 
-class _MyHomePageState extends StarkState<MyHomePage, Presenter> {
+class _MyHomePageState extends InjectableState<MyHomePage> {
+
+  final presenter = Stark.get<Presenter>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -34,7 +34,7 @@ In your flutter or dart project add the dependency:
 ```yml
 dependencies:
   ...
-  stark: 3.0.4
+  stark: 4.0.0
 ```
 
 ## Usage example
@@ -197,31 +197,10 @@ class LoginViewModel implements Disposable {
 
 
 ### Arch Components
-You could use `StarkPresenter` and `StarkState` or `StartkWidget` pro get a injected and scoped presenter in your statefull widget: 
+To support different types of architectures and state management we move these architecture components to new libraries.
 
-```dart
-
-class MyPresenter extends StarkPresenter {
-   final text = 'Hello World';
-}
-
-class MyWidget extends StarkWidget {
-  const MyWidget({Key? key}) : super(key: key);
-
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends StarkState<MyWidget, MyPresenter> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        presenter.text
-      )
-    );
-  }
-}
+stark_mvp: Stark library for MVP architecture
+stark_bloc: Stark library for flutter_bloc projects
 
 ```
 

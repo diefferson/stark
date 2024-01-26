@@ -137,7 +137,7 @@ packages:
     source: hosted
     version: "1.11.1"
   stark:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: ".."
       relative: true
