@@ -1,5 +1,3 @@
-import 'package:stark/src/model/disposable.dart';
-import 'package:stark/src/model/logger.dart';
 import '../../stark.dart';
 
 class Injector {

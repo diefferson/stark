@@ -1,7 +1,6 @@
 name: stark
 description: Stark - a pragmatic lightweight dependency injection framework for Dart
 version: 4.0.0
-author: Diefferson Santos <diefferson.sts@gmail.com>
 homepage: https://github.com/diefferson/stark
 
 environment:

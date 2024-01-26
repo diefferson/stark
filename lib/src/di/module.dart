@@ -1,4 +1,3 @@
-import 'package:stark/src/di/injector.dart';
 import 'package:stark/stark.dart';
 
 typedef _FactoryFunc<T> = T Function(Injector i);
